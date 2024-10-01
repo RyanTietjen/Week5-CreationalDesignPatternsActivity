@@ -1,4 +1,4 @@
-import { StandardCalculatorModelFactory } from './standard-calculator-model-factory';
+import { RoundingCalculatorModelFactory } from './rounding.calculator.model.factory';
 import { ICalculatorModel } from '../interfaces/calculator-model.interface';
 import { NumericKeys } from '../enums/numeric-keys.enum';
 import { OperatorKeys } from '../enums/operator-keys.enum';
@@ -7,10 +7,10 @@ import { ActionKeys } from '../enums/action-keys.enum';
 describe('CalculatorModel', (): void => {
 
   let calculator: ICalculatorModel;
-  let standardCalculatorFacotry = new StandardCalculatorModelFactory();
+  let roundingCalculatorFacotry = new RoundingCalculatorModelFactory(2);
 
   beforeEach((): void => {
-    calculator = standardCalculatorFacotry.createCalculatorModel();
+    calculator = roundingCalculatorFacotry.createCalculatorModel();
   });
 
   it('should contain a CalculatorModel class that implements ICalculatorModel', (): void => {
@@ -59,15 +59,19 @@ describe('CalculatorModel', (): void => {
 
   });
 
-  it('should display `13` when equals is clicked on `7 + 6`', (): void => {
+  it('should display `4.2` when equals is clicked on `2.1 + 2.1`', (): void => {
 
-    calculator.pressNumericKey(NumericKeys.SEVEN);
+    calculator.pressNumericKey(NumericKeys.TWO);
+    calculator.pressActionKey(ActionKeys.DOT);
+    calculator.pressNumericKey(NumericKeys.ONE);
     calculator.pressOperatorKey(OperatorKeys.PLUS);
-    calculator.pressNumericKey(NumericKeys.SIX);
+    calculator.pressNumericKey(NumericKeys.TWO);
+    calculator.pressActionKey(ActionKeys.DOT);
+    calculator.pressNumericKey(NumericKeys.ONE);
     calculator.pressActionKey(ActionKeys.EQUALS);
     const displayValue: string = calculator.display();
 
-    expect(displayValue).toEqual('13');
+    expect(displayValue).toEqual('4.2');
 
   });
 
@@ -85,30 +89,51 @@ describe('CalculatorModel', (): void => {
 
   });
 
-  it('should display `21` when equals is clicked on `3 * 7`', (): void => {
+  it('should display `9.67` when equals is clicked on `3.11 * 3.11`', (): void => {
 
     calculator.pressNumericKey(NumericKeys.THREE);
+    calculator.pressActionKey(ActionKeys.DOT);
+    calculator.pressNumericKey(NumericKeys.ONE);
+    calculator.pressNumericKey(NumericKeys.ONE);
     calculator.pressOperatorKey(OperatorKeys.MULT);
-    calculator.pressNumericKey(NumericKeys.SEVEN);
+    calculator.pressNumericKey(NumericKeys.THREE);
+    calculator.pressActionKey(ActionKeys.DOT);
+    calculator.pressNumericKey(NumericKeys.ONE);
+    calculator.pressNumericKey(NumericKeys.ONE);
     calculator.pressActionKey(ActionKeys.EQUALS);
     const displayValue: string = calculator.display();
 
-    expect(displayValue).toEqual('21');
+    expect(displayValue).toEqual('9.67');
 
   });
 
-  it('should display `12` when equals is clicked on `144 / 12`', (): void => {
+  it('should display `9.8` when equals is clicked on `3.13 * 3.13`', (): void => {
 
+    calculator.pressNumericKey(NumericKeys.THREE);
+    calculator.pressActionKey(ActionKeys.DOT);
     calculator.pressNumericKey(NumericKeys.ONE);
-    calculator.pressNumericKey(NumericKeys.FOUR);
-    calculator.pressNumericKey(NumericKeys.FOUR);
-    calculator.pressOperatorKey(OperatorKeys.DIV);
+    calculator.pressNumericKey(NumericKeys.THREE);
+    calculator.pressOperatorKey(OperatorKeys.MULT);
+    calculator.pressNumericKey(NumericKeys.THREE);
+    calculator.pressActionKey(ActionKeys.DOT);
     calculator.pressNumericKey(NumericKeys.ONE);
-    calculator.pressNumericKey(NumericKeys.TWO);
+    calculator.pressNumericKey(NumericKeys.THREE);
     calculator.pressActionKey(ActionKeys.EQUALS);
     const displayValue: string = calculator.display();
 
-    expect(displayValue).toEqual('12');
+    expect(displayValue).toEqual('9.8');
+
+  });
+
+  it('should display `1.33` when equals is clicked on `4 / 3`', (): void => {
+
+    calculator.pressNumericKey(NumericKeys.FOUR);
+    calculator.pressOperatorKey(OperatorKeys.DIV);
+    calculator.pressNumericKey(NumericKeys.THREE);
+    calculator.pressActionKey(ActionKeys.EQUALS);
+    const displayValue: string = calculator.display();
+
+    expect(displayValue).toEqual('1.33');
 
   });
 
